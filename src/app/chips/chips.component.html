@@ -1,0 +1,8 @@
+<mat-chip-list #chipList aria-label="option selection">
+  <mat-chip *ngFor="let option of selected" [selectable]="false" [removable]="true"
+    (removed)="deselectOption.emit(option)">
+    {{option.displayString}}
+    <mat-icon matChipRemove> close </mat-icon>
+  </mat-chip>
+  <ng-content></ng-content>
+</mat-chip-list>
