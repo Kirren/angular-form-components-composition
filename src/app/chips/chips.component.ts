@@ -18,7 +18,7 @@ export class ChipsComponent {
 
   @Output() deselectOption = new EventEmitter<Item | void>();
 
-  @ViewChild(MatChipList, { static: true }) chipList: MatChipList;
+  @ViewChild(MatChipList) chipList: MatChipList;
 
   public removeChip(option: Item) {
     this.deselectOption.emit(option);

@@ -23,6 +23,7 @@ import { ChipsComponent } from '../chips/chips.component';
 })
 export class FormFieldComponent implements OnInit {
   @Input() control: FormControl;
+  @Input() options: Item[];
 
   @ContentChild(ChipsComponent, { static: true })
   chips: ChipsComponent;
@@ -39,8 +40,6 @@ export class FormFieldComponent implements OnInit {
   private selectionChangeSubscription: Subscription;
 
   ngOnInit(): void {
-    this.matFormField._control = this.formControl;
-
     this.selection = new SelectionModel(true, this._value, true);
 
     if (this.auto) {

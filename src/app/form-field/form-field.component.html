@@ -1,7 +1,16 @@
 <mat-form-field>
-  <ng-content select="[app-chips]"></ng-content>
 
-  <ng-content></ng-content>
+  <app-chips #chipListComp></app-chips>
 
-  <ng-content select="[app-auto]"></ng-content>
+  <input
+    placeholder="New fruit..."
+    #fruitInput
+    matInput
+    [formControl]="control"
+    [matAutocomplete]="autoComp.auto"
+    [matChipInputFor]="chipListComp.chipList"
+  />
+
+  <app-auto #autoComp [control]="control" [options]="options"></app-auto>
+
 </mat-form-field>

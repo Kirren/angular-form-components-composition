@@ -11,7 +11,8 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-auto',
   templateUrl: './auto.component.html',
-  styleUrls: ['./auto.component.css']
+  styleUrls: ['./auto.component.css'],
+  exportAs: 'customAuto'
 })
 export class AutoComponent implements OnInit {
   @Input() control: FormControl;
@@ -19,7 +20,7 @@ export class AutoComponent implements OnInit {
 
   @Input() options: Item[] = [];
 
-  @ViewChild('auto', { static: true })
+  @ViewChild('auto')
   auto: MatAutocomplete;
 
   public filteredOptions: Item[] = this.options;
