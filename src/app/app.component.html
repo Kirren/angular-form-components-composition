@@ -1,1 +1,42 @@
-<app-form-field [control]="control" [options]="options"></app-form-field>
+<app-form-field>
+  <app-chips #chipListComp [selection]="selection">
+    <input
+      #fruitInput
+      matInput
+      [formControl]="control"
+      [matAutocomplete]="autoComp.auto"
+      [matChipInputFor]="chipListComp.chipList"
+
+    />
+  </app-chips>
+
+  <app-auto #autoComp [control]="control" [options]="options" [selection]="selection"></app-auto>
+
+</app-form-field>
+
+
+<!-- <app-form-field>
+  <mat-chip-list #chipListNative>
+    <mat-chip *ngFor="let option of selection.selected" [selectable]="false" [removable]="true"
+      (removed)="selection.deselect($event.chip.value)">
+      {{option.name}}
+      <mat-icon matChipRemove> close </mat-icon>
+    </mat-chip>
+
+    <input
+      #fruitInput
+      matInput
+      [formControl]="control"
+      [matAutocomplete]="autoNative"
+      [matChipInputFor]="chipListNative"
+    />
+  </mat-chip-list>
+
+  <mat-autocomplete #autoNative="matAutocomplete" [displayWith]="displayFn"
+    (optionSelected)="onOptionSelected($event)">
+    <mat-option *ngFor="let option of filteredOptions" [value]="option">
+      {{option}}
+    </mat-option>
+  </mat-autocomplete>
+
+</app-form-field> -->

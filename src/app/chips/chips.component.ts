@@ -1,3 +1,4 @@
+import { SelectionModel } from '@angular/cdk/collections';
 import {
   Component,
   EventEmitter,
@@ -5,22 +6,26 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatChipList } from '@angular/material/chips';
+import { MatChipEvent } from '@angular/material/chips/chip';
 import { Item } from '../app.component';
 
 @Component({
   selector: 'app-chips',
-  templateUrl: './chips.component.html',
-  styleUrls: ['./chips.component.css']
+  templateUrl: './chips.component.html'
 })
 export class ChipsComponent {
-  @Input() selected: Item[] = [];
+  @Input() selection: SelectionModel<Item>;
 
-  @Output() deselectOption = new EventEmitter<Item | void>();
+  // @Output() deselectOption_ = new EventEmitter<Item>();
 
-  @ViewChild(MatChipList) chipList: MatChipList;
+  @ViewChild(MatChipList, { static: true })
+  chipList: MatChipList;
 
-  public removeChip(option: Item) {
-    this.deselectOption.emit(option);
+  deselectOption(event: MatChipEvent) {
+    const { value } = event.chip;
+
+    this.selection.deselect(value);
   }
 }

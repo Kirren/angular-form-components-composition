@@ -1,8 +1,9 @@
-<mat-chip-list>
-  <mat-chip *ngFor="let option of selected" [selectable]="false" [removable]="true"
-    (removed)="deselectOption.emit(option)">
-    {{option.displayString}}
+<mat-chip-list #chipList>
+  <mat-chip *ngFor="let option of selection.selected" [selectable]="false" [removable]="true"
+    (removed)="deselectOption($event)">
+    {{option.name}}
     <mat-icon matChipRemove> close </mat-icon>
   </mat-chip>
+
   <ng-content></ng-content>
 </mat-chip-list>

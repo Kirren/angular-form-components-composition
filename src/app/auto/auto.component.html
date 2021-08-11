@@ -1,4 +1,4 @@
-<mat-autocomplete [displayWith]="displayFn" [autoActiveFirstOption] (optionSelected)="onOptionSelected($event)">
+<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onOptionSelected($event)">
   <mat-option *ngFor="let option of filteredOptions" [value]="option">
     {{option}}
   </mat-option>

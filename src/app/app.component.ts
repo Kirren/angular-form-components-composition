@@ -1,14 +1,13 @@
-import { Component, ElementRef, VERSION, ViewChild } from '@angular/core';
+import { SelectionModel } from '@angular/cdk/collections';
+import { Component, VERSION, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { AutoComponent } from './auto/auto.component';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { AutoComponent } from './auto/auto.component';
+import { ChipsComponent } from './chips/chips.component';
 
 export interface Item {
-  displayString?: string;
+  name: string;
   key?: string;
 }
 
@@ -22,17 +21,77 @@ export class AppComponent {
 
   options: Item[] = [
     {
-      displayString: 'Apple'
+      name: 'Apple'
     },
     {
-      displayString: 'Lemon'
+      name: 'Lemon'
     },
     {
-      displayString: 'Lime'
+      name: 'Lime'
     },
     {
-      displayString: 'Orange'
+      name: 'Orange'
     }
   ];
-  control = new FormControl();
+  control: FormControl;
+  selection: SelectionModel<Item>;
+
+  constructor() {
+    this.control = new FormControl(this.options[0]);
+  }
+
+  ngOnInit(): void {
+    console.log(this.control.value);
+    this.selection = new SelectionModel(true, [this.control.value], true);
+
+    console.log(this.selection.selected);
+
+    // this.valueChangeSubscription = this.control.valueChanges.subscribe(
+    //   (value) => {
+    //     this._filter(value);
+    //   }
+    // );
+  }
+
+  // public filteredOptions: Item[] = this.options;
+  // public filteredMatch: Item = null;
+
+  // valueChangeSubscription: Subscription;
+
+  // ngOnDestroy() {
+  //   this.valueChangeSubscription.unsubscribe();
+  // }
+
+  // private _filter(value: string): void {
+  //   if (value && typeof value === 'string') {
+  //     const keyMatch = this.options?.find(
+  //       (option) => option.key?.toLowerCase() === value.toLowerCase()
+  //     );
+  //     if (keyMatch) {
+  //       this.filteredOptions = [keyMatch];
+  //     } else {
+  //       this.filteredOptions = this.options.filter((option) => {
+  //         const text =
+  //           (option.name || '') +
+  //           (option.key || '');
+  //         return text.toLowerCase().indexOf(value.toLowerCase()) >= 0;
+  //       });
+  //     }
+  //     this.filteredMatch =
+  //       this.filteredOptions?.length === 1 ? this.filteredOptions[0] : null;
+  //   } else {
+  //     this.filteredOptions = this.options;
+  //     this.filteredMatch = null;
+  //   }
+  // }
+
+  // public onOptionSelected(event: MatAutocompleteSelectedEvent) {
+  //   const value = event.option.value;
+
+  //   this.selection.toggle(value);
+  // }
+
+  // public displayFn(option: Item): string {
+  //   return option && option.name ? option.name : null;
+  // }
 }

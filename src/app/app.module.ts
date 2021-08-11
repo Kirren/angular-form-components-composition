@@ -14,6 +14,8 @@ import { AutoComponent } from './auto/auto.component';
 import { FormFieldComponent } from './form-field/form-field.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ChipsComponent } from './chips/chips.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   imports: [
@@ -21,9 +23,11 @@ import { ChipsComponent } from './chips/chips.component';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
+    MatInputModule,
     MatFormFieldModule,
     MatAutocompleteModule,
-    MatChipsModule
+    MatChipsModule,
+    MatIconModule
   ],
   declarations: [
     AppComponent,

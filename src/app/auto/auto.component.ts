@@ -10,17 +10,14 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-auto',
-  templateUrl: './auto.component.html',
-  styleUrls: ['./auto.component.css'],
-  exportAs: 'customAuto'
+  templateUrl: './auto.component.html'
 })
 export class AutoComponent implements OnInit {
   @Input() control: FormControl;
   @Input() selection: SelectionModel<Item>;
-
   @Input() options: Item[] = [];
 
-  @ViewChild('auto')
+  @ViewChild('auto', {static: true})
   auto: MatAutocomplete;
 
   public filteredOptions: Item[] = this.options;
@@ -50,7 +47,7 @@ export class AutoComponent implements OnInit {
       } else {
         this.filteredOptions = this.options.filter((option) => {
           const text =
-            (option.displayString || '') +
+            (option.name || '') +
             (option.key || '');
           return text.toLowerCase().indexOf(value.toLowerCase()) >= 0;
         });
@@ -66,18 +63,10 @@ export class AutoComponent implements OnInit {
   public onOptionSelected(event: MatAutocompleteSelectedEvent) {
     const value = event.option.value;
 
-    if (value) {
-      this.selection.toggle(value);
-    } else {
-      this.selection.clear();
-    }
+    this.selection.toggle(value);
   }
 
-  public displayFn(options: any): string {
-    return options
-      ? options.displayString ||
-          options.map((v: Item) => v.displayString).join(', ')
-      : '';
+  public displayFn(option: Item): string {
+    return option && option.name ? option.name : null;
   }
-
 }
