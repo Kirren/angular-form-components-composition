@@ -64,6 +64,8 @@ export class AutoComponent implements OnInit {
     const value = event.option.value;
 
     this.selection.toggle(value);
+
+    this.control.setValue(this.selection.selected)
   }
 
   public displayFn(option: Item): string {

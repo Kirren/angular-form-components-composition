@@ -37,12 +37,12 @@ export class AppComponent {
   selection: SelectionModel<Item>;
 
   constructor() {
-    this.control = new FormControl(this.options[0]);
+    this.control = new FormControl([this.options[0]]);
   }
 
   ngOnInit(): void {
     console.log(this.control.value);
-    this.selection = new SelectionModel(true, [this.control.value], true);
+    this.selection = new SelectionModel(true, this.control.value, true);
 
     console.log(this.selection.selected);
 
