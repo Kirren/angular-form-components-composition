@@ -15,7 +15,7 @@
 </app-form-field>
 
 
-<!-- <app-form-field>
+<app-form-field>
   <mat-chip-list #chipListNative>
     <mat-chip *ngFor="let option of selection.selected" [selectable]="false" [removable]="true"
       (removed)="selection.deselect($event.chip.value)">
@@ -32,11 +32,10 @@
     />
   </mat-chip-list>
 
-  <mat-autocomplete #autoNative="matAutocomplete" [displayWith]="displayFn"
-    (optionSelected)="onOptionSelected($event)">
+  <mat-autocomplete #autoNative="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onOptionSelected($event)">
     <mat-option *ngFor="let option of filteredOptions" [value]="option">
       {{option}}
     </mat-option>
   </mat-autocomplete>
 
-</app-form-field> -->
+</app-form-field>
