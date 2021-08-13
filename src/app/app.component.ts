@@ -1,10 +1,8 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, VERSION, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { Subscription } from 'rxjs';
-import { AutoComponent } from './auto/auto.component';
-import { ChipsComponent } from './chips/chips.component';
 
 export interface Item {
   name: string;
@@ -36,7 +34,7 @@ export class AppComponent {
   control: FormControl;
   selection: SelectionModel<Item>;
 
-  @ViewChild('fruitInput') inputElement: HTMLInputElement;
+  @ViewChild(MatAutocompleteTrigger) trigger: MatAutocompleteTrigger;
 
   constructor() {
     this.control = new FormControl([this.options[0]]);
@@ -91,6 +89,6 @@ export class AppComponent {
   }
 
   public displayFn(option: Item): string {
-    return option && option.name ? option.name : null;
+    return option ? option.name : null;
   }
 }

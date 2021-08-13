@@ -1,5 +1,5 @@
 <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onOptionSelected($event)">
   <mat-option *ngFor="let option of filteredOptions" [value]="option">
-    {{option}}
+    {{option.name}}
   </mat-option>
 </mat-autocomplete>
