@@ -1,9 +1,4 @@
-import {
-  Component,
-  ContentChild,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { Component, ContentChild, OnInit, ViewChild } from '@angular/core';
 import {
   MatFormField,
   MatFormFieldControl
@@ -15,8 +10,7 @@ import { ChipsComponent } from '../chips/chips.component';
   selector: 'app-form-field',
   templateUrl: './form-field.component.html'
 })
-export class FormFieldComponent
-  implements OnInit {
+export class FormFieldComponent implements OnInit {
   @ContentChild(MatFormFieldControl, { static: true })
   public formFieldControl: MatFormFieldControl<Item>;
   @ContentChild(ChipsComponent, { static: true })

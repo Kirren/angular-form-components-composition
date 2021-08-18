@@ -1,66 +1,77 @@
+import { FocusMonitor } from '@angular/cdk/a11y';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
-import { SelectionModel } from '@angular/cdk/collections';
 import {
   Component,
   ElementRef,
-  HostBinding,
   Inject,
   Input,
   OnDestroy,
-  OnInit,
   Optional,
   Self,
   ViewChild
 } from '@angular/core';
 import { ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
-import { MatAutocomplete } from '@angular/material/autocomplete/autocomplete';
-import { MatChipEvent, MatChipList } from '@angular/material/chips';
 import {
+  MAT_FORM_FIELD,
   MatFormField,
-  MatFormFieldControl,
-  MAT_FORM_FIELD
+  MatFormFieldControl
 } from '@angular/material/form-field';
 import { Subject } from 'rxjs';
 import { Item } from '../app.component';
 
+/** Custom `MatFormFieldControl` for telephone number input. */
 @Component({
   selector: 'app-chip-input',
-  templateUrl: './chip-input.component.html',
-  styleUrls: ['./chip-input.component.css'],
+  templateUrl: 'chip-input.html',
+  styleUrls: ['chip-input.css'],
+  providers: [
+    { provide: MatFormFieldControl, useExisting: ChipInputComponent }
+  ],
   host: {
-    '[class.label-floating]': 'shouldLabelFloat',
+    '[class.example-floating]': 'shouldLabelFloat',
     '[id]': 'id'
-  },
-  providers: [{ provide: MatFormFieldControl, useExisting: ChipInputComponent }]
+  }
 })
 export class ChipInputComponent
-  implements
-    ControlValueAccessor,
-    MatFormFieldControl<Item>,
-    OnInit,
-    OnDestroy {
-  stateChanges = new Subject<void>();
+  implements ControlValueAccessor, MatFormFieldControl<Item>, OnDestroy {
+  static nextId = 0;
+  @ViewChild('input') input: HTMLInputElement;
 
-  @Input() auto?: MatAutocomplete;
-  @Input() formControl!: FormControl;
-  @Input() selection: SelectionModel<Item>;
+  control: FormControl;
+  stateChanges = new Subject<void>();
+  focused = false;
+  touched = false;
+  controlType = 'example-tel-input';
+  id = `example-input-${ChipInputComponent.nextId++}`;
+  onChange = (_: any) => {};
+  onTouched = () => {};
+
+  get empty() {
+    return !this.control.value;
+  }
+
+  get shouldLabelFloat() {
+    return this.focused || !this.empty;
+  }
+
+  @Input('aria-describedby') userAriaDescribedBy: string;
 
   @Input()
-  get placeholder() {
+  get placeholder(): string {
     return this._placeholder;
   }
-  set placeholder(text: string) {
-    this._placeholder = text;
+  set placeholder(value: string) {
+    this._placeholder = value;
     this.stateChanges.next();
   }
   private _placeholder: string;
 
   @Input()
-  get required() {
+  get required(): boolean {
     return this._required;
   }
-  set required(req) {
-    this._required = coerceBooleanProperty(req);
+  set required(value: boolean) {
+    this._required = coerceBooleanProperty(value);
     this.stateChanges.next();
   }
   private _required = false;
@@ -71,76 +82,43 @@ export class ChipInputComponent
   }
   set disabled(value: boolean) {
     this._disabled = coerceBooleanProperty(value);
-    this._disabled ? this.formControl.disable() : this.formControl.enable();
+    this._disabled ? this.control.disable() : this.control.enable();
     this.stateChanges.next();
   }
   private _disabled = false;
 
-  @Input('aria-describedby') userAriaDescribedBy: string;
-
-  get errorState(): boolean {
-    return this.formControl.invalid && this.touched;
-  }
-  get empty() {
-    return !this.formControl.value;
-  }
-
-  @ViewChild(MatChipList, { static: true })
-  chipList: MatChipList;
-
   @Input()
+  get value(): Item | null {
+    if (this.control.valid) {
+      return this.control.value;
+    }
+    return null;
+  }
   set value(_value: Item | null) {
-    this.formControl.setValue(_value);
+    this.control.setValue(_value);
     this.stateChanges.next();
   }
-  get value(): Item {
-    return this.formControl.value;
+
+  get errorState(): boolean {
+    return this.control.invalid && this.touched;
   }
-
-  static nextId = 0;
-  @HostBinding() id = `chip-input-${ChipInputComponent.nextId++}`;
-
-  @HostBinding('class.label-floating')
-  get shouldLabelFloat() {
-    return this.focused || !this.empty;
-  }
-
-  focused = false;
-  touched = false;
-
-  onChange = (_: any) => {};
-  onTouched = () => {};
-
-  // ngControl: NgControl = null;
 
   constructor(
+    private _focusMonitor: FocusMonitor,
     private _elementRef: ElementRef<HTMLElement>,
+    @Optional() @Inject(MAT_FORM_FIELD) public _formField: MatFormField,
     @Optional() @Self() public ngControl: NgControl
   ) {
+    this.control = !this.control && new FormControl();
+
     if (this.ngControl != null) {
-      // Setting the value accessor directly (instead of using
-      // the providers) to avoid running into a circular import.
       this.ngControl.valueAccessor = this;
     }
   }
 
-  ngOnInit() {}
-
   ngOnDestroy() {
     this.stateChanges.complete();
-  }
-
-  setDescribedByIds(ids: string[]) {
-    const controlElement = this._elementRef.nativeElement.querySelector(
-      'mat-chip-list'
-    )!;
-    controlElement.setAttribute('aria-describedby', ids.join(' '));
-  }
-
-  onContainerClick(event: MouseEvent) {
-    if ((event.target as Element).tagName.toLowerCase() != 'input') {
-      this._elementRef.nativeElement.querySelector('input').focus();
-    }
+    this._focusMonitor.stopMonitoring(this._elementRef);
   }
 
   onFocusIn(event: FocusEvent) {
@@ -161,10 +139,17 @@ export class ChipInputComponent
     }
   }
 
-  deselectOption(event: MatChipEvent) {
-    const { value } = event.chip;
+  setDescribedByIds(ids: string[]) {
+    const controlElement = this._elementRef.nativeElement.querySelector(
+      '.example-input-container'
+    )!;
+    controlElement.setAttribute('aria-describedby', ids.join(' '));
+  }
 
-    this.selection.deselect(value);
+  onContainerClick() {
+    if (this.control.valid) {
+      this._focusMonitor.focusVia(this.input, 'program');
+    }
   }
 
   writeValue(_value: Item | null): void {

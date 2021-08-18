@@ -1,15 +1,9 @@
-<mat-chip-list #chipList>
-  <mat-chip *ngFor="let option of selection.selected" [selectable]="false" [removable]="true"
-    (removed)="deselectOption($event)">
-    {{option.name}}
-    <mat-icon matChipRemove> close </mat-icon>
-  </mat-chip>
-
-  <input
-    matInput
-    [formControl]="formControl"
-    [matAutocomplete]="auto"
-    [matChipInputFor]="chipList"
-    (input)="_handleInput()"
-    />
-</mat-chip-list>
+<div role="group" class="example-input-container">
+  <input class="example-input-element"
+         [formControl]="control"
+         aria-label="test input"
+         (input)="_handleInput()"
+         (focusin)="onFocusIn($event)"
+         (focusout)="onFocusOut($event)"
+         #input>
+</div>
