@@ -16,6 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ChipsComponent } from './chips/chips.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { ChipInputComponent } from './chip-input/chip-input.component';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { MatIconModule } from '@angular/material/icon';
     HelloComponent,
     AutoComponent,
     ChipsComponent,
+    ChipInputComponent,
     FormFieldComponent
   ],
   providers: [
