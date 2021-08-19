@@ -1,9 +1,16 @@
-<div role="group" class="example-input-container">
-  <input class="example-input-element"
-         [formControl]="control"
-         aria-label="test input"
-         (input)="_handleInput()"
-         (focusin)="onFocusIn($event)"
-         (focusout)="onFocusOut($event)"
-         #input>
-</div>
+<mat-chip-list #chipList class="example-input-container" multiple [formControl]="control">
+  <mat-chip *ngFor="let option of control.value" [value]="option" [selected]="option" removable color="primary"
+    (removed)="deselectOption(option)">
+    {{option.name}}
+    <mat-icon matChipRemove> close </mat-icon>
+  </mat-chip>
+
+  <input #input
+    class="example-input-element"
+    aria-label="test input"
+    [matChipInputFor]="chipList"
+    [matChipInputTokenEnd]="selectOption($event)"
+    (focusin)="onFocusIn($event)"
+    (focusout)="onFocusOut($event)"
+  />
+</mat-chip-list>

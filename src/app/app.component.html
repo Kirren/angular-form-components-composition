@@ -1,3 +1,11 @@
+<mat-form-field>
+  <mat-label> Custom Form-field </mat-label>
+  <app-chip-input [formControl]="control" placeholder="Test" required></app-chip-input>
+</mat-form-field>
+
+<hr />
+
+<!--
 <app-form-field (click)="trigger.openPanel()">
   <app-chips #chipListComp [selection]="selection">
     <input
@@ -13,10 +21,8 @@
 
 </app-form-field>
 
-<mat-form-field>
-  <mat-label> Custom Form-field </mat-label>
-  <app-chip-input [formControl]="control" placeholder="Test" required></app-chip-input>
-</mat-form-field>
+<hr />
+-->
 
 
 <mat-form-field (click)="trigger.openPanel()">

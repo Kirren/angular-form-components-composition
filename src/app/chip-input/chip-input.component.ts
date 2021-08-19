@@ -11,6 +11,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
+import { MatChipEvent, MatChipInputEvent } from '@angular/material/chips';
 import {
   MAT_FORM_FIELD,
   MatFormField,
@@ -19,11 +20,10 @@ import {
 import { Subject } from 'rxjs';
 import { Item } from '../app.component';
 
-/** Custom `MatFormFieldControl` for telephone number input. */
 @Component({
   selector: 'app-chip-input',
-  templateUrl: 'chip-input.html',
-  styleUrls: ['chip-input.css'],
+  templateUrl: 'chip-input.component.html',
+  styleUrls: ['chip-input.component.css'],
   providers: [
     { provide: MatFormFieldControl, useExisting: ChipInputComponent }
   ],
@@ -33,15 +33,19 @@ import { Item } from '../app.component';
   }
 })
 export class ChipInputComponent
-  implements ControlValueAccessor, MatFormFieldControl<Item>, OnDestroy {
+  implements ControlValueAccessor, MatFormFieldControl<Item[]>, OnDestroy {
   static nextId = 0;
   @ViewChild('input') input: HTMLInputElement;
 
   control: FormControl;
   stateChanges = new Subject<void>();
+
+  private _placeholder: string;
+  private _required = false;
+  private _disabled = false;
   focused = false;
   touched = false;
-  controlType = 'example-tel-input';
+  controlType = 'chip-input';
   id = `example-input-${ChipInputComponent.nextId++}`;
   onChange = (_: any) => {};
   onTouched = () => {};
@@ -54,7 +58,8 @@ export class ChipInputComponent
     return this.focused || !this.empty;
   }
 
-  @Input('aria-describedby') userAriaDescribedBy: string;
+  @Input('aria-describedby')
+  userAriaDescribedBy: string;
 
   @Input()
   get placeholder(): string {
@@ -64,7 +69,6 @@ export class ChipInputComponent
     this._placeholder = value;
     this.stateChanges.next();
   }
-  private _placeholder: string;
 
   @Input()
   get required(): boolean {
@@ -74,7 +78,6 @@ export class ChipInputComponent
     this._required = coerceBooleanProperty(value);
     this.stateChanges.next();
   }
-  private _required = false;
 
   @Input()
   get disabled(): boolean {
@@ -85,16 +88,15 @@ export class ChipInputComponent
     this._disabled ? this.control.disable() : this.control.enable();
     this.stateChanges.next();
   }
-  private _disabled = false;
 
   @Input()
-  get value(): Item | null {
+  get value(): Item[] | null {
     if (this.control.valid) {
       return this.control.value;
     }
     return null;
   }
-  set value(_value: Item | null) {
+  set value(_value: Item[] | null) {
     this.control.setValue(_value);
     this.stateChanges.next();
   }
@@ -119,6 +121,25 @@ export class ChipInputComponent
   ngOnDestroy() {
     this.stateChanges.complete();
     this._focusMonitor.stopMonitoring(this._elementRef);
+  }
+
+  selectOption(event: MatChipInputEvent): void {
+    const newValue = [...this.value];
+    const selectedOption: Item = { name: event.value };
+
+    newValue.push(selectedOption);
+    console.log(newValue);
+
+    this.writeValue(newValue);
+  }
+
+  deselectOption(option: Item) {
+    const currentValue = [...this.value];
+
+    const newValue = currentValue.filter((v: Item) => v.name !== option.name);
+    console.log(newValue);
+
+    this.writeValue(newValue);
   }
 
   onFocusIn(event: FocusEvent) {
@@ -152,7 +173,7 @@ export class ChipInputComponent
     }
   }
 
-  writeValue(_value: Item | null): void {
+  writeValue(_value: Item[] | null): void {
     this.value = _value;
   }
 
@@ -166,10 +187,6 @@ export class ChipInputComponent
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
-  }
-
-  _handleInput(): void {
-    this.onChange(this.value);
   }
 
   static ngAcceptInputType_disabled: BooleanInput;
