@@ -1,6 +1,11 @@
 <mat-form-field>
   <mat-label> Custom Form-field </mat-label>
-  <app-chip-input [formControl]="control" placeholder="Test" required></app-chip-input>
+  <app-chip-input [formControl]="control" placeholder="Test" [required]="false" [disabled]="false"
+    [auto]="autoComp.auto">
+  </app-chip-input>
+
+  <app-auto #autoComp [control]="control" [options]="options" [selection]="selection"></app-auto>
+
 </mat-form-field>
 
 <hr />

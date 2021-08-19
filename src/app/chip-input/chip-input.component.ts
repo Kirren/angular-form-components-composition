@@ -1,5 +1,6 @@
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { BooleanInput, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import {
   Component,
   ElementRef,
@@ -11,7 +12,8 @@ import {
   ViewChild
 } from '@angular/core';
 import { ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
-import { MatChipEvent, MatChipInputEvent } from '@angular/material/chips';
+import { MatAutocomplete } from '@angular/material/autocomplete/autocomplete';
+import { MatChipInputEvent } from '@angular/material/chips';
 import {
   MAT_FORM_FIELD,
   MatFormField,
@@ -50,6 +52,8 @@ export class ChipInputComponent
   onChange = (_: any) => {};
   onTouched = () => {};
 
+  separatorKeyCodes = [ENTER, COMMA];
+
   get empty() {
     return !this.control.value;
   }
@@ -57,6 +61,9 @@ export class ChipInputComponent
   get shouldLabelFloat() {
     return this.focused || !this.empty;
   }
+
+  @Input('auto')
+  auto: MatAutocomplete;
 
   @Input('aria-describedby')
   userAriaDescribedBy: string;
@@ -123,7 +130,12 @@ export class ChipInputComponent
     this._focusMonitor.stopMonitoring(this._elementRef);
   }
 
+  handleInput(event: Event) {
+    console.log(event);
+  }
+
   selectOption(event: MatChipInputEvent): void {
+    console.log(event);
     const newValue = [...this.value];
     const selectedOption: Item = { name: event.value };
 

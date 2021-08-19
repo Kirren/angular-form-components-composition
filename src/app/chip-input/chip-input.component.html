@@ -5,11 +5,13 @@
     <mat-icon matChipRemove> close </mat-icon>
   </mat-chip>
 
-  <input #input
+  <input #input matInput
     class="example-input-element"
     aria-label="test input"
+    [matAutocomplete]="auto"
     [matChipInputFor]="chipList"
-    [matChipInputTokenEnd]="selectOption($event)"
+    (matChipInputTokenEnd)="selectOption($event)"
+    (input)="handleInput($event)"
     (focusin)="onFocusIn($event)"
     (focusout)="onFocusOut($event)"
   />

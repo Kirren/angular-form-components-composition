@@ -6,10 +6,7 @@ import {
   MAT_FORM_FIELD_DEFAULT_OPTIONS
 } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import {
-  MatChipsModule,
-  MAT_CHIPS_DEFAULT_OPTIONS
-} from '@angular/material/chips';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { AppComponent } from './app.component';
 import { HelloComponent } from './hello.component';
@@ -20,7 +17,6 @@ import { ChipsComponent } from './chips/chips.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { ChipInputComponent } from './chip-input/chip-input.component';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 @NgModule({
   imports: [
@@ -46,12 +42,6 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'outline', floatLabel: 'auto' }
-    },
-    {
-      provide: MAT_CHIPS_DEFAULT_OPTIONS,
-      useValue: {
-        separatorKeyCodes: [ENTER, COMMA]
-      }
     }
   ],
   bootstrap: [AppComponent]
